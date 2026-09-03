@@ -16,7 +16,8 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { IconCard } from "@/components/ui/icon-card";
 import { JobCard } from "@/components/jobs/job-card";
 import { AnnouncementCard } from "@/components/announcements/announcement-card";
-import { MOCK_ANNOUNCEMENTS, MOCK_JOBS } from "@/lib/mock-data";
+import { MOCK_ANNOUNCEMENTS } from "@/lib/mock-data";
+import { prisma } from "@/lib/prisma";
 
 const CATEGORIES = [
   { icon: Factory, label: "Oil & Gas / Engineering" },
@@ -53,8 +54,14 @@ const VALUE_PROPS = [
   },
 ];
 
-export default function HomePage() {
-  const featuredJobs = MOCK_JOBS.slice(0, 6);
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const featuredJobs = await prisma.job.findMany({
+    where: { isActive: true },
+    orderBy: { createdAt: "desc" },
+    take: 6,
+  });
   const latestAnnouncements = MOCK_ANNOUNCEMENTS.slice(0, 3);
 
   return (
@@ -108,11 +115,17 @@ export default function HomePage() {
           </LinkButton>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredJobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
-        </div>
+        {featuredJobs.length === 0 ? (
+          <div className="mt-10 rounded-xl border border-dashed border-neutral-300 bg-white p-10 text-center text-neutral-500">
+            No open positions right now — check back soon.
+          </div>
+        ) : (
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredJobs.map((job) => (
+              <JobCard key={job.id} job={job} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Who We Recruit For */}

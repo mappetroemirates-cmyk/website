@@ -113,3 +113,14 @@ model Announcement {
 
   @@map("announcements")
 }
+
+// Minimal editable-text-block CMS: a handful of named keys (about_us_text,
+// contact_phone, contact_email, contact_address) edited from /admin/content
+// and read directly by the public site.
+model SiteContent {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("site_content")
+}

@@ -1,8 +1,13 @@
+import { getSiteContent } from "@/lib/site-content";
+
 export const metadata = {
   title: "Contact Us | MAP Petro Emirates",
 };
+export const dynamic = "force-dynamic";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getSiteContent();
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
       <h1 className="text-3xl font-extrabold text-slate-900">Contact Us</h1>
@@ -56,15 +61,15 @@ export default function ContactPage() {
         <div className="space-y-4 text-sm text-slate-600">
           <div>
             <h2 className="font-semibold text-slate-900">Office</h2>
-            <p>Dubai, United Arab Emirates</p>
+            <p>{content.contact_address ?? "Dubai, United Arab Emirates"}</p>
           </div>
           <div>
             <h2 className="font-semibold text-slate-900">Email</h2>
-            <p>info@mappetroemirates.com</p>
+            <p>{content.contact_email ?? "info@mappetroemirates.com"}</p>
           </div>
           <div>
             <h2 className="font-semibold text-slate-900">Phone</h2>
-            <p>+971 4 000 0000</p>
+            <p>{content.contact_phone ?? "+971 4 000 0000"}</p>
           </div>
         </div>
       </div>
