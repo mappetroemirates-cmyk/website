@@ -69,6 +69,11 @@ model Job {
 
   applications Application[]
 
+  // Set when this listing was created from a recruiter's hiring request,
+  // so admin (and eventually the recruiter) can trace the two together.
+  sourceHiringRequestId String?
+  sourceHiringRequest   HiringRequest? @relation(fields: [sourceHiringRequestId], references: [id])
+
   @@map("jobs")
 }
 
@@ -124,4 +129,77 @@ model SiteContent {
   updatedAt DateTime @updatedAt
 
   @@map("site_content")
+}
+
+// Messages submitted through the public site's /contact form.
+model ContactSubmission {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  message     String
+  submittedAt DateTime @default(now())
+  isRead      Boolean  @default(false)
+
+  @@map("contact_submissions")
+}
+
+// Simple contact list of employer/client companies MAP Petro Emirates places
+// candidates with — not a login/account system, just an admin-side CRM.
+model Client {
+  id            String   @id @default(cuid())
+  companyName   String
+  contactPerson String?
+  phone         String?
+  email         String?
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  @@map("clients")
+}
+
+enum HiringRequestStatus {
+  submitted
+  under_review @map("under-review")
+  in_progress  @map("in-progress")
+  fulfilled
+  closed
+
+  @@map("hiring_request_status")
+}
+
+// Third user type alongside Candidate and Admin. Recruiters register/log in
+// on the public site and submit HiringRequests — they never create job
+// listings directly; only Admin turns a request into an actual Job.
+model Recruiter {
+  id                String   @id @default(cuid())
+  companyName       String
+  contactPersonName String
+  email             String   @unique
+  phone             String
+  password          String
+  industry          String?
+  createdAt         DateTime @default(now())
+
+  hiringRequests HiringRequest[]
+
+  @@map("recruiters")
+}
+
+model HiringRequest {
+  id                 String              @id @default(cuid())
+  recruiterId        String
+  department         String
+  numberOfPositions  Int
+  roleTitle          String
+  jobType            JobType
+  experienceRequired String
+  preferredStartDate DateTime?
+  additionalNotes    String?
+  status             HiringRequestStatus @default(submitted)
+  createdAt          DateTime            @default(now())
+
+  recruiter Recruiter @relation(fields: [recruiterId], references: [id], onDelete: Cascade)
+  jobs      Job[]
+
+  @@map("hiring_requests")
 }

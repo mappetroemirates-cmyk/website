@@ -11,6 +11,8 @@ const NAV_LINKS = [
   { href: "/about", label: "About" },
   { href: "/jobs", label: "Jobs" },
   { href: "/announcements", label: "Announcements" },
+  { href: "/clients", label: "For Clients" },
+  { href: "/recruiter/login", label: "Recruiter Login" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -18,6 +20,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const { data: session, status } = useSession();
   const isCandidate = session?.user?.role === "candidate";
+  const isRecruiter = session?.user?.role === "recruiter";
 
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/90 backdrop-blur">
@@ -60,17 +63,24 @@ export function SiteHeader() {
             <LinkButton href="/dashboard" size="sm">
               Dashboard
             </LinkButton>
+          ) : status === "authenticated" && isRecruiter ? (
+            <LinkButton href="/recruiter/dashboard" size="sm">
+              Recruiter Dashboard
+            </LinkButton>
           ) : (
             <>
               <Link
                 href="/login"
-                className="rounded-md px-3 py-2 text-sm font-medium text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900"
+                className="rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50"
               >
                 Login
               </Link>
-              <LinkButton href="/register" size="sm">
+              <Link
+                href="/register"
+                className="rounded-full bg-accent-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-accent-600"
+              >
                 Register
-              </LinkButton>
+              </Link>
             </>
           )}
         </div>

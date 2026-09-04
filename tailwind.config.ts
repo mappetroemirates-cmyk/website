@@ -7,11 +7,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // Display serif for headings — reference as `font-display`.
+        // Body text stays on the default sans (Inter) stack.
+        display: ["var(--font-fraunces)", "Georgia", "serif"],
+      },
       colors: {
-        // Placeholder brand palette — swap these hex values for the client's
-        // confirmed brand colors once available. Every component should
-        // reference primary/accent/neutral tokens only, never raw Tailwind
-        // colors, so a rebrand is a one-file change.
+        // Brand palette sampled directly from the actual logo artwork
+        // (public/logo-icon.png) — navy + green, no orange. Every component
+        // should reference primary/accent/neutral tokens only, never raw
+        // Tailwind colors, so a rebrand stays a one-file change.
         primary: {
           50: "#eef4fb",
           100: "#d9e6f5",
@@ -26,16 +31,17 @@ const config: Config = {
           950: "#0c1626",
         },
         accent: {
-          50: "#fff8ec",
-          100: "#ffedc7",
-          200: "#ffd98a",
-          300: "#ffbf4d",
-          400: "#ffa726",
-          500: "#f78c0e",
-          600: "#db6d05",
-          700: "#b55208",
-          800: "#93400d",
-          900: "#78350f",
+          50: "#f3f6ef",
+          100: "#e3eadb",
+          200: "#c7d6b7",
+          300: "#a3bd8a",
+          400: "#88a577",
+          500: "#5c8343",
+          600: "#4c6d38",
+          700: "#3d582d",
+          800: "#304523",
+          900: "#26361c",
+          950: "#141d0f",
         },
         neutral: {
           50: "#f8fafc",

@@ -1,6 +1,6 @@
 import { DefaultSession } from "next-auth";
 
-export type UserRole = "candidate";
+export type UserRole = "candidate" | "recruiter";
 
 declare module "next-auth" {
   interface Session {

@@ -38,7 +38,7 @@ export default async function JobDetailPage({
           {JOB_TYPE_LABEL[job.jobType]}
         </span>
 
-        <h1 className="mt-4 text-3xl font-extrabold text-neutral-900">
+        <h1 className="mt-4 font-display text-3xl font-semibold text-neutral-900">
           {job.title}
         </h1>
         <p className="mt-1 text-lg font-medium text-neutral-500">

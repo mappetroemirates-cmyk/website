@@ -1,37 +1,18 @@
 import { Megaphone } from "lucide-react";
-import { prisma } from "@/lib/prisma";
 import { AnnouncementCard } from "@/components/announcements/announcement-card";
-import type { MockAnnouncement } from "@/lib/mock-data";
+import { getAnnouncements } from "@/lib/announcements";
 
 export const metadata = {
   title: "Announcements | MAP Petro Emirates",
 };
 export const dynamic = "force-dynamic";
 
-const TYPE_MAP: Record<string, MockAnnouncement["type"]> = {
-  job_update: "job-update",
-  event: "event",
-  notice: "notice",
-};
-
 export default async function AnnouncementsPage() {
-  const rows = await prisma.announcement.findMany({
-    orderBy: { publishedAt: "desc" },
-  });
-
-  const announcements: MockAnnouncement[] = rows.map((row) => ({
-    id: row.id,
-    title: row.title,
-    excerpt:
-      row.content.length > 160 ? `${row.content.slice(0, 160)}…` : row.content,
-    content: row.content,
-    type: TYPE_MAP[row.type] ?? "notice",
-    publishedAt: row.publishedAt.toISOString().slice(0, 10),
-  }));
+  const announcements = await getAnnouncements();
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
-      <h1 className="text-3xl font-extrabold text-neutral-900">
+      <h1 className="font-display text-3xl font-semibold text-neutral-900">
         Announcements &amp; News
       </h1>
       <p className="mt-2 text-neutral-600">

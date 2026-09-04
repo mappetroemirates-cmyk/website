@@ -8,10 +8,16 @@ import { buttonClasses } from "@/components/ui/button";
 const FIELD_CLASS =
   "w-full rounded-md border border-neutral-300 px-3.5 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500";
 
-export function LoginForm() {
+export function LoginForm({
+  providerId = "credentials",
+  defaultCallbackUrl = "/dashboard",
+}: {
+  providerId?: string;
+  defaultCallbackUrl?: string;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || defaultCallbackUrl;
   const justRegistered = searchParams.get("registered") === "1";
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -25,7 +31,7 @@ export function LoginForm() {
     const password = String(formData.get("password"));
 
     startTransition(async () => {
-      const result = await signIn("credentials", {
+      const result = await signIn(providerId, {
         email,
         password,
         redirect: false,
