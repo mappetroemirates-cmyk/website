@@ -36,6 +36,12 @@ export default async function RecruiterDashboardPage() {
             Welcome, {recruiter.contactPersonName}
           </h1>
           <p className="mt-2 text-slate-600">{recruiter.companyName}</p>
+          <Link
+            href="/recruiter/dashboard/settings"
+            className="mt-1 inline-block text-sm font-medium text-primary-700 hover:underline"
+          >
+            Account Settings
+          </Link>
         </div>
         <Link href="/recruiter/dashboard/new" className={buttonClasses({ size: "lg" })}>
           Submit a Hiring Request

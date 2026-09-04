@@ -178,6 +178,7 @@ model Recruiter {
   phone             String
   password          String
   industry          String?
+  logoUrl           String?
   createdAt         DateTime @default(now())
 
   hiringRequests HiringRequest[]

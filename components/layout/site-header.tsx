@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { LinkButton } from "@/components/ui/button";
+import { useSession, signOut } from "next-auth/react";
+import { ChevronDown, LogOut, Settings, User } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -15,6 +16,72 @@ const NAV_LINKS = [
   { href: "/recruiter/login", label: "Recruiter Login" },
   { href: "/contact", label: "Contact" },
 ];
+
+function AccountMenu({
+  label,
+  dashboardHref,
+  settingsHref,
+}: {
+  label: string;
+  dashboardHref: string;
+  settingsHref: string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-label="Account menu"
+        className="flex items-center gap-2 rounded-full border border-neutral-300 py-1.5 pl-1.5 pr-3 text-sm font-medium text-neutral-700 transition-colors hover:border-neutral-400 hover:bg-neutral-50"
+      >
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-700">
+          <User className="h-4 w-4" aria-hidden="true" />
+        </span>
+        <span className="hidden sm:inline">{label}</span>
+        <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+      </button>
+
+      {open && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="absolute right-0 top-12 z-20 w-56 rounded-lg border border-neutral-200 bg-white p-1.5 shadow-lg">
+            <Link
+              href={dashboardHref}
+              onClick={() => setOpen(false)}
+              className="block rounded-md px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+            >
+              Dashboard
+            </Link>
+            <Link
+              href={settingsHref}
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+            >
+              <Settings className="h-4 w-4" aria-hidden="true" />
+              Account Settings
+            </Link>
+            <div className="my-1 border-t border-neutral-100" />
+            <button
+              type="button"
+              onClick={() => signOut({ callbackUrl: "/" })}
+              className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm text-rose-600 hover:bg-rose-50"
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
+              Logout
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -60,13 +127,17 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2">
           {status === "authenticated" && isCandidate ? (
-            <LinkButton href="/dashboard" size="sm">
-              Dashboard
-            </LinkButton>
+            <AccountMenu
+              label="My Account"
+              dashboardHref="/dashboard"
+              settingsHref="/dashboard/settings"
+            />
           ) : status === "authenticated" && isRecruiter ? (
-            <LinkButton href="/recruiter/dashboard" size="sm">
-              Recruiter Dashboard
-            </LinkButton>
+            <AccountMenu
+              label="My Account"
+              dashboardHref="/recruiter/dashboard"
+              settingsHref="/recruiter/dashboard/settings"
+            />
           ) : (
             <>
               <Link

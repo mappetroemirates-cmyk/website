@@ -36,7 +36,15 @@ export default async function CandidateDashboardPage() {
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm lg:col-span-1">
-          <h2 className="text-lg font-bold text-neutral-900">Profile</h2>
+          <div className="flex items-center justify-between gap-3">
+            <h2 className="text-lg font-bold text-neutral-900">Profile</h2>
+            <Link
+              href="/dashboard/settings"
+              className="text-sm font-medium text-primary-700 hover:underline"
+            >
+              Edit
+            </Link>
+          </div>
           <dl className="mt-4 space-y-3 text-sm">
             <div>
               <dt className="text-neutral-400">Email</dt>
